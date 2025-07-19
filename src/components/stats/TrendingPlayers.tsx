@@ -120,12 +120,14 @@ export function TrendingPlayers({ players, loading }: TrendingPlayersProps) {
                         {trend.toFixed(1)}%
                       </div>
                       <div className="text-xs text-secondary-500">trending down</div>
+                    </div>
+                  </div>
                 )
               })
             ) : (
               <div className="text-center py-8">
                 <p className="text-secondary-500">No significant drops this week</p>
-                const trend = player.trendingChange || 0
+              </div>
             )}
           </div>
         </CardContent>
