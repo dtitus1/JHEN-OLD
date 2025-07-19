@@ -64,10 +64,7 @@ export interface Player {
   isActive: boolean
   stats?: SleeperStats
   projections?: SleeperProjections
-  ownership?: {
-    percentOwned: number
-    percentChange: number
-  }
+  trendingChange?: number
   searchRank: number | null
   depthChartPosition: number | null
 }
@@ -222,10 +219,6 @@ export class SleeperFantasyAPI {
       isActive: sleeperPlayer.active && sleeperPlayer.status === 'Active',
       searchRank: sleeperPlayer.search_rank,
       depthChartPosition: sleeperPlayer.depth_chart_position,
-      ownership: {
-        percentOwned: Math.random() * 100, // Mock data - would need league-specific data
-        percentChange: (Math.random() - 0.5) * 20
-      }
     }
   }
 
@@ -322,15 +315,9 @@ export class SleeperFantasyAPI {
         const dropData = dropResponse.data.find((item: SleeperTrendingPlayer) => item.player_id === player.id)
         
         if (addData) {
-          player.ownership = {
-            percentOwned: Math.random() * 100,
-            percentChange: Math.min(addData.count / 100, 20) // Convert to percentage
-          }
+          player.trendingChange = Math.min(addData.count / 100, 20) // Convert to percentage
         } else if (dropData) {
-          player.ownership = {
-            percentOwned: Math.random() * 100,
-            percentChange: -Math.min(dropData.count / 100, 20) // Negative for drops
-          }
+          player.trendingChange = -Math.min(dropData.count / 100, 20) // Negative for drops
         }
       })
 
@@ -428,10 +415,6 @@ export class SleeperFantasyAPI {
         isActive: true,
         searchRank: i,
         depthChartPosition: Math.floor(Math.random() * 3) + 1,
-        ownership: { 
-          percentOwned: Math.max(0, 100 - (i * 0.5) + (Math.random() * 20)), 
-          percentChange: (Math.random() - 0.5) * 20 
-        }
       })
     }
 
@@ -451,7 +434,6 @@ export class SleeperFantasyAPI {
         isActive: true,
         searchRank: 1,
         depthChartPosition: 1,
-        ownership: { percentOwned: 99.8, percentChange: 0.1 }
       },
       {
         id: 'christian_mccaffrey',
@@ -467,7 +449,6 @@ export class SleeperFantasyAPI {
         isActive: true,
         searchRank: 2,
         depthChartPosition: 1,
-        ownership: { percentOwned: 99.9, percentChange: 0.0 }
       },
       {
         id: 'tyreek_hill',
@@ -483,7 +464,6 @@ export class SleeperFantasyAPI {
         isActive: true,
         searchRank: 3,
         depthChartPosition: 1,
-        ownership: { percentOwned: 99.5, percentChange: 0.2 }
       }
     ]
 
@@ -513,7 +493,7 @@ export class SleeperFantasyAPI {
         isActive: true,
         searchRank: 150,
         depthChartPosition: 2,
-        ownership: { percentOwned: 45.2, percentChange: 15.8 }
+        trendingChange: 15.8
       },
       {
         id: '102',
@@ -529,7 +509,7 @@ export class SleeperFantasyAPI {
         isActive: true,
         searchRank: 200,
         depthChartPosition: 3,
-        ownership: { percentOwned: 23.1, percentChange: 12.4 }
+        trendingChange: 12.4
       }
     ]
   }

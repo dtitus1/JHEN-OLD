@@ -102,12 +102,11 @@ export function Rankings() {
     }[player.position] || 10
 
     const rankBonus = player.searchRank ? Math.max(0, (200 - player.searchRank) / 20) : 0
-    const ownershipBonus = (player.ownership?.percentOwned || 50) / 20
-    return Number((baseProjection + rankBonus + ownershipBonus + Math.random() * 3).toFixed(1))
+    return Number((baseProjection + rankBonus + Math.random() * 3).toFixed(1))
   }
 
   const getTrend = (player: Player): 'up' | 'down' | 'neutral' => {
-    const change = player.ownership?.percentChange || 0
+    const change = player.trendingChange || 0
     if (change > 2) return 'up'
     if (change < -2) return 'down'
     return 'neutral'
@@ -170,10 +169,6 @@ export function Rankings() {
       case 'projection':
         aValue = getProjection(a)
         bValue = getProjection(b)
-        break
-      case 'ownership':
-        aValue = a.ownership?.percentOwned || 0
-        bValue = b.ownership?.percentOwned || 0
         break
       default:
         aValue = a.searchRank || 9999

@@ -58,10 +58,6 @@ export function PlayerStatsTable({ players, loading }: PlayerStatsTableProps) {
         aValue = a.age || 0
         bValue = b.age || 0
         break
-      case 'ownership':
-        aValue = a.ownership?.percentOwned || 0
-        bValue = b.ownership?.percentOwned || 0
-        break
       default:
         aValue = a.searchRank || 9999
         bValue = b.searchRank || 9999
@@ -145,15 +141,6 @@ export function PlayerStatsTable({ players, loading }: PlayerStatsTableProps) {
                   <div className="flex items-center space-x-1">
                     <span>Age/Exp</span>
                     {getSortIcon('age')}
-                  </div>
-                </th>
-                <th 
-                  className="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider cursor-pointer hover:bg-secondary-100 transition-colors"
-                  onClick={() => handleSort('ownership')}
-                >
-                  <div className="flex items-center space-x-1">
-                    <span>Ownership</span>
-                    {getSortIcon('ownership')}
                   </div>
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-secondary-500 uppercase tracking-wider">

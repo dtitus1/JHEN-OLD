@@ -100,7 +100,7 @@ export function TrendingPlayers({ players, loading }: TrendingPlayersProps) {
             {drops.length > 0 ? (
               drops.slice(0, 5).map((player) => {
                 const team = NFL_TEAMS[player.team || '']
-                const trend = player.ownership?.percentChange || 0
+                const trend = player.trendingChange || 0
 
                 return (
                   <div key={player.id} className="flex items-center justify-between">
@@ -119,17 +119,13 @@ export function TrendingPlayers({ players, loading }: TrendingPlayersProps) {
                       <div className="text-sm font-medium text-red-600">
                         {trend.toFixed(1)}%
                       </div>
-                      <div className="text-xs text-secondary-500">
-                        {(player.ownership?.percentOwned || 0).toFixed(1)}% owned
-                      </div>
-                    </div>
-                  </div>
+                      <div className="text-xs text-secondary-500">trending down</div>
                 )
               })
             ) : (
               <div className="text-center py-8">
                 <p className="text-secondary-500">No significant drops this week</p>
-              </div>
+                const trend = player.trendingChange || 0
             )}
           </div>
         </CardContent>

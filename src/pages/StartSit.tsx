@@ -180,10 +180,9 @@ export function StartSit() {
 
     const baseline = positionBaselines[player.position as keyof typeof positionBaselines] || 8
     const rankBonus = player.searchRank ? Math.max(0, (100 - player.searchRank) / 10) : 0
-    const ownershipBonus = (player.ownership?.percentOwned || 50) / 25
     const randomVariance = (Math.random() - 0.5) * 4
 
-    return Number((baseline + rankBonus + ownershipBonus + randomVariance).toFixed(1))
+    return Number((baseline + rankBonus + randomVariance).toFixed(1))
   }
 
   const getMatchupRating = (player: Player): 'excellent' | 'good' | 'average' | 'poor' | 'terrible' => {
