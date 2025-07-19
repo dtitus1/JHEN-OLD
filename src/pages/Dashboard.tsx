@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Calendar, TrendingUp, Shield, Users, Target, AlertTriangle, RefreshCw, Activity } from 'lucide-react'
 import { Card, CardContent, CardHeader } from '../components/ui/Card'
 import { Button } from '../components/ui/Button'
+import { useAuth } from '../contexts/AuthContext'
 import { PositionalMatchups } from '../components/dashboard/PositionalMatchups'
 import { PanicMeter } from '../components/dashboard/PanicMeter'
 import { ByeWeeks } from '../components/dashboard/ByeWeeks'
@@ -13,9 +14,14 @@ import { SleeperIntegration } from '../components/dashboard/SleeperIntegration'
 type DashboardTab = 'positional-matchups' | 'panic-meter' | 'bye-weeks' | 'schedule-analysis' | 'defensive-schemes' | 'oline-rankings' | 'sleeper-data'
 
 export function Dashboard() {
+  const { user } = useAuth()
   const [activeTab, setActiveTab] = useState<DashboardTab>('sleeper-data')
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
   const [loading, setLoading] = useState(false)
+  const [userProfile, setUserProfile] = useState<{ subscription_tier: string } | null>(null)
+
+  // Check if user is admin
+  const isAdmin = userProfile?.subscription_tier === 'admin'
 
   const tabs = [
     {
@@ -70,16 +76,38 @@ export function Dashboard() {
       setActiveTab(tabParam as DashboardTab)
     }
     
-    // Simulate initial data load
+    // Load user profile and initial data
+    loadUserProfile()
     setLastUpdated(new Date())
   }, [])
 
+  const loadUserProfile = async () => {
+    if (!user) return
+    
+    try {
+      // In a real implementation, you would fetch the user's profile from Supabase
+      // For now, we'll simulate admin status based on email or other criteria
+      const isAdminUser = user.email?.includes('admin') || user.email?.includes('jhen')
+      setUserProfile({ 
+        subscription_tier: isAdminUser ? 'admin' : 'free' 
+      })
+    } catch (error) {
+      console.error('Error loading user profile:', error)
+    }
+  }
+
   const handleRefreshData = async () => {
+    if (!isAdmin) {
+      console.warn('Refresh action restricted to administrators')
+      return
+    }
+
     setLoading(true)
     try {
-      // Simulate API calls to refresh data
+      // Simulate API calls to refresh data for admins
       await new Promise(resolve => setTimeout(resolve, 2000))
       setLastUpdated(new Date())
+      console.log('Admin refresh completed')
     } catch (error) {
       console.error('Error refreshing data:', error)
     } finally {
@@ -127,14 +155,16 @@ export function Dashboard() {
                 )}
               </p>
             </div>
-            <Button
-              onClick={handleRefreshData}
-              disabled={loading}
-              variant="outline"
-            >
-              <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-              Refresh All Data
-            </Button>
+            {isAdmin && (
+              <Button
+                onClick={handleRefreshData}
+                disabled={loading}
+                variant="outline"
+              >
+                <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+                Admin Refresh
+              </Button>
+            )}
           </div>
         </div>
 

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Activity, TrendingUp, AlertTriangle, RefreshCw } from 'lucide-react'
+import { Activity, TrendingUp, AlertTriangle, Clock } from 'lucide-react'
 import { Card, CardContent, CardHeader } from '../ui/Card'
-import { Button } from '../ui/Button'
 import { sleeperDashboardAPI, SleeperMatchupData, SleeperInjuryData, SleeperOwnershipData } from '../../lib/sleeper-dashboard-api'
 
 export function SleeperIntegration() {
@@ -10,13 +9,38 @@ export function SleeperIntegration() {
   const [ownershipData, setOwnershipData] = useState<SleeperOwnershipData[]>([])
   const [loading, setLoading] = useState(true)
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
+  const [nextRefresh, setNextRefresh] = useState<Date | null>(null)
+  const [refreshInterval, setRefreshInterval] = useState<NodeJS.Timeout | null>(null)
+
+  // Auto-refresh interval (15 minutes)
+  const REFRESH_INTERVAL_MS = 15 * 60 * 1000
 
   useEffect(() => {
     loadSleeperData()
+    
+    // Set up automatic refresh
+    const interval = setInterval(() => {
+      loadSleeperData(true) // Silent refresh
+    }, REFRESH_INTERVAL_MS)
+    
+    setRefreshInterval(interval)
+    
+    // Calculate next refresh time
+    setNextRefresh(new Date(Date.now() + REFRESH_INTERVAL_MS))
+    
+    // Cleanup interval on unmount
+    return () => {
+      if (interval) {
+        clearInterval(interval)
+      }
+    }
   }, [])
 
-  const loadSleeperData = async () => {
-    setLoading(true)
+  const loadSleeperData = async (silent = false) => {
+    if (!silent) {
+      setLoading(true)
+    }
+    
     try {
       const [matchups, injuries, ownership] = await Promise.all([
         sleeperDashboardAPI.getPositionalMatchups('QB'),
@@ -28,10 +52,17 @@ export function SleeperIntegration() {
       setInjuryData(injuries.slice(0, 6))
       setOwnershipData(ownership.slice(0, 6))
       setLastUpdated(new Date())
+      setNextRefresh(new Date(Date.now() + REFRESH_INTERVAL_MS))
+      
+      if (!silent) {
+        console.log('Sleeper data refreshed successfully')
+      }
     } catch (error) {
       console.error('Error loading Sleeper data:', error)
     } finally {
-      setLoading(false)
+      if (!silent) {
+        setLoading(false)
+      }
     }
   }
 
@@ -52,17 +83,29 @@ export function SleeperIntegration() {
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-xl font-semibold text-secondary-900">Sleeper API Integration</h2>
-              <p className="text-secondary-600">Real-time fantasy football data from Sleeper</p>
-              {lastUpdated && (
-                <p className="text-sm text-secondary-500 mt-1">
-                  Last updated: {lastUpdated.toLocaleTimeString()}
-                </p>
+              <p className="text-secondary-600">Real-time fantasy football data with automatic updates</p>
+              <div className="flex items-center space-x-4 mt-1 text-sm text-secondary-500">
+                {lastUpdated && (
+                  <span>Last updated: {lastUpdated.toLocaleTimeString()}</span>
+                )}
+                {nextRefresh && (
+                  <span className="flex items-center">
+                    <Clock className="h-3 w-3 mr-1" />
+                    Next refresh: {nextRefresh.toLocaleTimeString()}
+                  </span>
+                )}
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="text-sm text-secondary-600">Auto-refresh enabled</div>
+              <div className="text-xs text-secondary-500">Every 15 minutes</div>
+              {loading && (
+                <div className="flex items-center justify-end mt-1">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-600 mr-2"></div>
+                  <span className="text-xs text-secondary-500">Updating...</span>
+                </div>
               )}
             </div>
-            <Button onClick={loadSleeperData} disabled={loading} variant="outline">
-              <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-              Refresh Data
-            </Button>
           </div>
         </CardHeader>
       </Card>

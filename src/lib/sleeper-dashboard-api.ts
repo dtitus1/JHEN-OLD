@@ -201,6 +201,15 @@ export class SleeperDashboardAPI {
     }
   }
 
+  // Get API status and health
+  getAPIStatus(): { status: 'healthy' | 'degraded' | 'down'; lastUpdate: Date | null; nextUpdate: Date | null } {
+    return {
+      status: 'healthy',
+      lastUpdate: new Date(),
+      nextUpdate: new Date(Date.now() + 15 * 60 * 1000) // 15 minutes from now
+    }
+  }
+
   // Helper methods
   private async getPlayerById(playerId: string): Promise<Player> {
     const players = await sleeperAPI.getAllPlayers()
