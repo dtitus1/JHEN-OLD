@@ -197,7 +197,7 @@ export function SleeperIntegration() {
                     </div>
                     <div className="text-right">
                       <div className="text-sm font-medium">
-                        {player.percentOwned.toFixed(1)}% owned
+                        Trending Player
                       </div>
                       <div className={`text-xs ${player.addDropTrend > 0 ? 'text-green-600' : 'text-red-600'}`}>
                         {player.addDropTrend > 0 ? '+' : ''}{player.addDropTrend.toFixed(1)}%

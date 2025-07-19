@@ -126,10 +126,10 @@ export class SleeperDashboardAPI {
         playerName: player.fullName,
         position: player.position,
         team: player.team || 'FA',
-        percentOwned: player.ownership?.percentOwned || 0,
-        percentStarted: (player.ownership?.percentOwned || 0) * 0.7, // Estimate
-        addDropTrend: player.ownership?.percentChange || 0,
-        weeklyChange: player.ownership?.percentChange || 0
+        percentOwned: 0, // Not available from public Sleeper API
+        percentStarted: 0, // Not available from public Sleeper API
+        addDropTrend: player.trendingChange || 0,
+        weeklyChange: player.trendingChange || 0
       }))
     } catch (error) {
       console.error('Error fetching ownership trends:', error)

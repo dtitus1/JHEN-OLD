@@ -151,8 +151,7 @@ export function PlayerStatsTable({ players, loading }: PlayerStatsTableProps) {
             <tbody className="bg-white divide-y divide-secondary-200">
               {sortedPlayers.slice(0, 50).map((player, index) => {
                 const team = NFL_TEAMS[player.team || '']
-                const ownership = player.ownership?.percentOwned || 0
-                const trend = player.ownership?.percentChange || 0
+                const trend = player.trendingChange || 0
 
                 return (
                   <tr key={player.id} className="hover:bg-secondary-50 transition-colors">
@@ -183,12 +182,6 @@ export function PlayerStatsTable({ players, loading }: PlayerStatsTableProps) {
                       <div>
                         {player.age && <div>Age: {player.age}</div>}
                         {player.yearsExp !== null && <div className="text-xs text-secondary-500">Exp: {player.yearsExp}yr</div>}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-secondary-900">
-                      <div className="flex items-center">
-                        <Users className="h-4 w-4 mr-1 text-secondary-400" />
-                        {ownership.toFixed(1)}%
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
