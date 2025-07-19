@@ -6,10 +6,12 @@ interface StatsOverviewProps {
   totalPlayers: number
   activeLeagues: number
   weeklyUpdates: number
+  dataSources: number
+  compositeScore: number
   loading: boolean
 }
 
-export function StatsOverview({ totalPlayers, activeLeagues, weeklyUpdates, loading }: StatsOverviewProps) {
+export function StatsOverview({ totalPlayers, activeLeagues, weeklyUpdates, dataSources, compositeScore, loading }: StatsOverviewProps) {
   const stats = [
     {
       title: 'Total Players Tracked',
@@ -34,15 +36,22 @@ export function StatsOverview({ totalPlayers, activeLeagues, weeklyUpdates, load
     },
     {
       title: 'Data Sources',
-      value: '5+',
+      value: dataSources.toString(),
       icon: Activity,
       color: 'text-primary-600',
       bgColor: 'bg-primary-100',
     },
+    {
+      title: 'Data Quality Score',
+      value: `${compositeScore}/100`,
+      icon: Activity,
+      color: 'text-purple-600',
+      bgColor: 'bg-purple-100',
+    },
   ]
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
       {stats.map((stat, index) => (
         <Card key={index} className="hover:shadow-lg transition-shadow">
           <CardContent className="p-6">

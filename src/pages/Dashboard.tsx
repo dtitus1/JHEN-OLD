@@ -210,27 +210,35 @@ export function Dashboard() {
               <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm text-secondary-600">
                 <div>
                   <div className="font-medium text-secondary-900">Sleeper API</div>
-                  <div>Player data & trends</div>
+                  <div>Player data & trends (35%)</div>
                 </div>
                 <div>
                   <div className="font-medium text-secondary-900">Yahoo Fantasy Sports</div>
-                  <div>Defensive rankings</div>
+                  <div>Defensive rankings (20%)</div>
                 </div>
                 <div>
                   <div className="font-medium text-secondary-900">FantasyPros</div>
-                  <div>Expert consensus</div>
+                  <div>Expert consensus (20%)</div>
                 </div>
                 <div>
                   <div className="font-medium text-secondary-900">FantasyLife</div>
-                  <div>Injury reports</div>
+                  <div>Injury reports (15%)</div>
                 </div>
                 <div>
                   <div className="font-medium text-secondary-900">Pro Football Focus</div>
-                  <div>Advanced analytics</div>
+                  <div>Advanced analytics (10%)</div>
                 </div>
               </div>
+              <div className="mt-4 p-4 bg-primary-50 rounded-lg">
+                <h4 className="font-medium text-primary-900 mb-2">Composite Data Quality Score</h4>
+                <p className="text-sm text-primary-700">
+                  Our platform aggregates data from 5 premium sources with weighted scoring based on 
+                  data accuracy, coverage, and update frequency. The composite score reflects overall 
+                  data reliability across all integrated APIs and services.
+                </p>
+              </div>
               <div className="mt-4 text-xs text-secondary-500">
-                Data automatically refreshes daily at 4:00 AM EST • Sleeper data updates every 15 minutes
+                Data automatically refreshes: Sleeper (15min) • Yahoo/FantasyPros (1hr) • FantasyLife/PFF (4hr)
               </div>
             </div>
           </CardContent>

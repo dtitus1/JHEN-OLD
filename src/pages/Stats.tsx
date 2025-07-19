@@ -17,7 +17,9 @@ export function Stats() {
   const [statsOverview, setStatsOverview] = useState({
     totalPlayers: 0,
     activeLeagues: 0,
-    weeklyUpdates: 0
+    weeklyUpdates: 0,
+    dataSources: 0,
+    compositeScore: 0
   })
 
   const positions = [
@@ -113,6 +115,8 @@ export function Stats() {
           totalPlayers={statsOverview.totalPlayers}
           activeLeagues={statsOverview.activeLeagues}
           weeklyUpdates={statsOverview.weeklyUpdates}
+          dataSources={statsOverview.dataSources}
+          compositeScore={statsOverview.compositeScore}
           loading={loading}
         />
 
