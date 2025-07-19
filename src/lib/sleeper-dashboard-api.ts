@@ -126,8 +126,8 @@ export class SleeperDashboardAPI {
         playerName: player.fullName,
         position: player.position,
         team: player.team || 'FA',
-        percentOwned: 0, // Not available from public Sleeper API
-        percentStarted: 0, // Not available from public Sleeper API
+        percentOwned: 0, // Not available from public Sleeper API - removed from display
+        percentStarted: 0, // Not available from public Sleeper API - removed from display
         addDropTrend: player.trendingChange || 0,
         weeklyChange: player.trendingChange || 0
       }))

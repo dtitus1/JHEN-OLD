@@ -35,8 +35,8 @@ export function TrendingPlayers({ players, loading }: TrendingPlayersProps) {
     )
   }
 
-  const addDrops = players.filter(p => (p.ownership?.percentChange || 0) > 2)
-  const drops = players.filter(p => (p.ownership?.percentChange || 0) < -2)
+  const mostAdded = players.filter(p => (p.trendingChange || 0) > 2)
+  const mostDropped = players.filter(p => (p.trendingChange || 0) < -2)
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -50,9 +50,9 @@ export function TrendingPlayers({ players, loading }: TrendingPlayersProps) {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {addDrops.slice(0, 5).map((player) => {
+            {mostAdded.slice(0, 5).map((player) => {
               const team = NFL_TEAMS[player.team || '']
-              const trend = player.ownership?.percentChange || 0
+              const trend = player.trendingChange || 0
 
               return (
                 <div key={player.id} className="flex items-center justify-between">
@@ -72,13 +72,13 @@ export function TrendingPlayers({ players, loading }: TrendingPlayersProps) {
                       +{trend.toFixed(1)}%
                     </div>
                     <div className="text-xs text-secondary-500">
-                      {(player.ownership?.percentOwned || 0).toFixed(1)}% owned
+                      trending up
                     </div>
                   </div>
                 </div>
               )
             })}
-            {addDrops.length === 0 && (
+            {mostAdded.length === 0 && (
               <div className="text-center py-8">
                 <p className="text-secondary-500">No significant adds this week</p>
               </div>
@@ -97,8 +97,8 @@ export function TrendingPlayers({ players, loading }: TrendingPlayersProps) {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {drops.length > 0 ? (
-              drops.slice(0, 5).map((player) => {
+            {mostDropped.length > 0 ? (
+              mostDropped.slice(0, 5).map((player) => {
                 const team = NFL_TEAMS[player.team || '']
                 const trend = player.trendingChange || 0
 
